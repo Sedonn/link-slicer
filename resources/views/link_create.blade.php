@@ -334,7 +334,7 @@
             <form action="{{ route('createLink') }}" method="POST">
               @csrf
               <fieldset class="create_record_of_link">
-                <input type="text" name="userLink" placeholder="Write your link">
+                <input type="url" name="userLink" placeholder="Write your link">
                 <button>Slice Link</button>
               </fieldset>
             </form>

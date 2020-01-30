@@ -20,7 +20,7 @@ Route::get('/links', 'LinkController@getAllUserLinks')->middleware('userAuthoriz
 
 Route::match(['get', 'post'], '/createlink', ['uses'=>'LinkController@createUserLink', 'as'=>'createLink'])->middleware('userAuthorize');
 
-Route::match(['get', 'post'], '/editlink/{linkId?}', 'LinkController@editUserLink')->middleware('userAuthorize');
+Route::match(['get', 'post'], '/editlink', ['uses'=>'LinkController@editUserLink', 'as'=>'editLink'])->middleware('userAuthorize');
 
 Route::get('/{linkKey?}', 'LinkController@redirectToUserLink');
 

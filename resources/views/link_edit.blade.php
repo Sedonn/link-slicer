@@ -333,7 +333,30 @@
 
         </div>
         <!-- /.container-fluid -->
-
+        <div class="user_links">
+          <form action="{{ route('editLink')}}" method="POST">
+            @csrf
+            <fieldset class="update_link_data">
+              @section('user_links_data')
+                @if($userLinks->count() > 0)
+                  @foreach ($userLinks as $userLink)
+                    <span class="link_info">
+                      <input type="radio" name="userLink" value="{{ $userLink->link }}">
+                      <span>Настоящий адрес: {{ $userLink->link }}</span> <br>
+                      <span>Сокращенный адрес: {{ $userLink->key }}</span> <br> <br>
+                    </span>
+                  @endforeach
+                @else
+                  <span>Ссылки отсутствуют</span>
+                @endif
+                  @show
+              <input type="url" placeholder="Введите новую ссылку" name="newUserLink"><br>
+              <input type="radio" name="condtForChangeKey" value="changeKey">
+              <span>Изменить ключ?</span><br>
+              <button>Изменить ссылку</button>    
+          </fieldset>
+        </form>
+        </div>
       </div>
       <!-- End of Main Content -->
 

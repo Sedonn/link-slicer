@@ -12,6 +12,6 @@ class AuthController extends Controller
     }
     public function exitUser()
     {
-        
+        return view('login');
     }
 }

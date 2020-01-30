@@ -9,22 +9,25 @@ class CheckAuthLoginPage
 {
     /**
      * Handle an incoming request.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
+        // Working
         if(isset($_COOKIE['token']) && isset($_COOKIE['login']))
         {
             $login = $_COOKIE['login'];
             $token = $_COOKIE['token'];
-            $user = userModel::where('login', $login)->first();
+            $user = userModel::where('name', $login)->first();
             if($user)
-                if(!strcmp($user->token,$token))
+                if(strcmp($user->remember_token,$token) == 0)
+                    return redirect('/links');
+                else
                     return redirect('/');
         }
         return $next($request);
     }
+    
 }

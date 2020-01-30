@@ -102,14 +102,11 @@
         </a>
         <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item active" href="blank.html">Blank Page</a>
+            <h6 class="collapse-header">Link Operations:</h6>
+              <a class="collapse-item" href="links">My Links</a>
+              <a class="collapse-item" href="createlink">Create Link</a>
+              <a class="collapse-item" href="editlink">Edit Link</a>
+              <a class="collapse-item" href="">Delete link</a>
           </div>
         </div>
       </li>
@@ -333,6 +330,15 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+          <div class="create_user_link">
+            <form action="{{ route('createLink') }}" method="POST">
+              @csrf
+              <fieldset class="create_record_of_link">
+                <input type="text" name="userLink" placeholder="Write your link">
+                <button>Slice Link</button>
+              </fieldset>
+            </form>
+          </div>
 
         </div>
         <!-- /.container-fluid -->
@@ -374,7 +380,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="{{route('logout')}}">Logout</a>
         </div>
       </div>
     </div>

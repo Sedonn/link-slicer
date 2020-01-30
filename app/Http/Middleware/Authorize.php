@@ -20,11 +20,12 @@ class Authorize
         {
             $login = $_COOKIE['login'];
             $token = $_COOKIE['token'];
-            $user = userModel::where('login', $login)->first();
+            $user = userModel::where('name', $login)->first();
             if($user)
-                if(!strcmp($user->token,$token))
-                    return $next($request);        
-        }
+                if(strcmp($user->remember_token,$token) == 0)
+                    return $next($request); 
+        } 
         return redirect('/');
+            
     }
 }

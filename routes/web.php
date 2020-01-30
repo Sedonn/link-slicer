@@ -10,14 +10,31 @@
 |
 */
 
-Route::match(['get', 'post'], '/', 'AuthController@authUser');
+Route::match(['get', 'post'], '/', ['uses'=>'UserLoginController@login', 'as'=>'login'])->middleware('loginAuth');
 
-Route::match(['get', 'post'], '/exit','AuthController@exitUser');
+Route::match(['get', 'post'], '/register', ['uses'=>'UserRegisterContoller@register', 'as'=>'register']);
 
-Route::get('/links', 'LinkController@getAllUserLinks');
+Route::match(['get', 'post'], '/exit',['uses'=>'UserLoginController@logout', 'as'=>'logout']);
 
-Route::match(['get', 'post'], '/createlink', 'LinkController@createUserLink');
+Route::get('/links', 'LinkController@getAllUserLinks')->middleware('userAuthorize');
 
-Route::match(['get', 'post'], '/editlink/{linkId?}', 'LinkController@editUserLink');
+Route::match(['get', 'post'], '/createlink', ['uses'=>'LinkController@createUserLink', 'as'=>'createLink'])->middleware('userAuthorize');
+
+Route::match(['get', 'post'], '/editlink/{linkId?}', 'LinkController@editUserLink')->middleware('userAuthorize');
 
 Route::get('/{linkKey?}', 'LinkController@redirectToUserLink');
+
+/*  Autorize
+->middleware('userAuthorize')
+Route::group(['middleware'=>'userAuthorize'], function () {
+    Route::match(['get', 'post'], '/register', ['uses'=>'UserRegisterContoller@register', 'as'=>'register']);
+
+    Route::match(['get', 'post'], '/exit',['uses'=>'UserLoginController@logout', 'as'=>'logout']);
+
+    Route::get('/links', 'LinkController@getAllUserLinks');
+
+    Route::match(['get', 'post'], '/createlink', 'LinkController@createUserLink');
+
+    Route::match(['get', 'post'], '/editlink/{linkId?}', 'LinkController@editUserLink');
+});
+*/

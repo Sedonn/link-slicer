@@ -106,7 +106,7 @@
               <a class="collapse-item" href="links">My Links</a>
               <a class="collapse-item" href="createlink">Create Link</a>
               <a class="collapse-item" href="editlink">Edit Link</a>
-              <a class="collapse-item" href="">Delete link</a>
+              <a class="collapse-item" href="deletelink">Delete link</a>
           </div>
         </div>
       </li>

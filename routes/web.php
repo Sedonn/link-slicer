@@ -22,6 +22,8 @@ Route::match(['get', 'post'], '/createlink', ['uses'=>'LinkController@createUser
 
 Route::match(['get', 'post'], '/editlink', ['uses'=>'LinkController@editUserLink', 'as'=>'editLink'])->middleware('userAuthorize');
 
+Route::match(['get', 'post'], '/deletelink',['uses'=>'LinkController@deleteUserLink', 'as'=>'deleteLink'])->middleware('userAuthorize');
+
 Route::get('/{linkKey?}', 'LinkController@redirectToUserLink');
 
 /*  Autorize

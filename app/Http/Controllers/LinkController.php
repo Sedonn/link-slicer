@@ -80,6 +80,23 @@ class LinkController extends Controller
         }
             
     }
+    public function deleteUserLink(Request $request)
+    {
+        if($request->method()=='POST')
+        {
+            //"userLink":["https:\/\/github.com\/Sedonn\/linksliser","https:\/\/www.php.net\/"]}
+            $userLinks = $request->input('userLink');
+            foreach($userLinks as $userLink)
+                linkModel::where('link',$userLink)->delete();
+            return redirect('/links');
+        }
+        else
+        {
+            $links = linkModel::where('added_by',$_COOKIE['login'])->get();
+            return view('link_delete',['userLinks'=>$links]);
+        }
+            
+    }
     public function getAllUserLinks()
     {
         $links = linkModel::where('added_by',$_COOKIE['login'])->get();

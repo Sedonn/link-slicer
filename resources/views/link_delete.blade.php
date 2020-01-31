@@ -106,7 +106,7 @@
               <a class="collapse-item" href="links">My Links</a>
               <a class="collapse-item" href="createlink">Create Link</a>
               <a class="collapse-item" href="editlink">Edit Link</a>
-              <a class="collapse-item" href="">Delete link</a>
+              <a class="collapse-item" href="deletelink">Delete link</a>
           </div>
         </div>
       </li>
@@ -333,7 +333,28 @@
 
         </div>
         <!-- /.container-fluid -->
-
+        <div class="user_links">
+          <form action="{{ route('deleteLink')}}" method="POST">
+            @csrf
+            <fieldset class="update_link_data">
+              @section('user_links_data')
+                @if($userLinks->count() > 0)
+                  @foreach ($userLinks as $userLink)
+                    <span class="link_info">
+                      <input type="checkbox" name="userLink[]" value="{{ $userLink->link }}">
+                      <span>Настоящий адрес: {{ $userLink->link }}</span> <br>
+                      <span>Сокращенный адрес: {{ $userLink->key }}</span> <br> <br>
+                    </span>
+                  @endforeach
+                @else
+                  <span>Ссылки отсутствуют</span>
+                @endif
+              @show
+              <button type="sumbit">Удалить</button>    
+            </fieldset>
+          </form>
+        </div>
+      </div>
       </div>
       <!-- End of Main Content -->
 

@@ -129,28 +129,29 @@
 
         </div>
         <!-- /.container-fluid -->
-
-        <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Original link</th>
-                <th>Sliced link</th>
-              </tr>
-            </thead>
-            <tbody>
-              @section('user_links_data')
-                @if($userLinks->count() > 0)
-                  @foreach ($userLinks as $userLink)
-                    <tr>
-                      <td><a href="{{ $userLink->link }}">{{ $userLink->link }}</a></td>
-                      <td><a href="http://linkslicer.home/{{ $userLink->key }}">{{ $userLink->key }}</a></td>
-                    </tr>
-                    @endforeach
-                @endif
-              @show
-            </tbody>
-          </table>
+        <div class="container-fluid">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Original link</th>
+                  <th>Sliced link</th>
+                </tr>
+              </thead>
+              <tbody>
+                @section('user_links_data')
+                  @if($userLinks->count() > 0)
+                    @foreach ($userLinks as $userLink)
+                      <tr>
+                        <td><a href="{{ $userLink->link }}">{{ $userLink->link }}</a></td>
+                        <td><a href="http://linkslicer.home/{{ $userLink->key }}">{{ $userLink->key }}</a></td>
+                      </tr>
+                      @endforeach
+                  @endif
+                @show
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <!-- End of Main Content -->

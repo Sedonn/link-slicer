@@ -129,7 +129,7 @@
 
         </div>
         <!-- /.container-fluid -->
-        <div class="user_links">
+        <div class="container-fluid">
           <form action="{{ route('editLink')}}" method="POST">
             @csrf
             <fieldset class="update_link_data">
@@ -155,12 +155,12 @@
                   @show
                 </tbody>
               </table>
-              <input type="url" placeholder="Enter your link" name="newUserLink"><br>
+              <input type="url" placeholder="Enter your link" name="newUserLink" class="form-control form-control-user">
               <input type="radio" name="condtForChangeKey" value="changeKey">
               <span>Change link key?</span> <br>
               <input type="radio" name="" value="">
               <span>No</span><br>
-              <button>Change link</button>    
+              <button class="btn btn-primary btn-user btn-block">Change link</button>    
           </fieldset>
         </form>
         </div>
@@ -201,7 +201,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="{{route('logout')}}">Logout</a>
         </div>
       </div>
     </div>

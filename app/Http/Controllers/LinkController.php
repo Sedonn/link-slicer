@@ -41,7 +41,7 @@ class LinkController extends Controller
             $link = $request->input('userLink');
             linkModel::insert([
                 'added_by'=>$_COOKIE['login'],
-                'key' => regenLink(),
+                'key' => self::regenLink(),
                 'link' => $link
             ]);
             return redirect('/links');

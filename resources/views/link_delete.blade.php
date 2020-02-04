@@ -146,7 +146,7 @@
                     @if($userLinks->count() > 0)
                       @foreach ($userLinks as $userLink)
                         <tr>
-                          <td width="10px"><input type="checkbox" name="userLink" value="{{ $userLink->link }}"></td>
+                          <td width="10px"><input type="checkbox" name="userLink[]" value="{{ $userLink->link }}"></td>
                           <td><a href="{{ $userLink->link }}">{{ $userLink->link }}</a></td>
                           <td><a href="http://linkslicer.home/{{ $userLink->key }}">{{ $userLink->key }}</a></td>
                         </tr>

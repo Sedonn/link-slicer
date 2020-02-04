@@ -36,15 +36,21 @@ class LinkController extends Controller
     }
     public function createUserLink(Request $request)
     {
-        if ($request->method() == "POST")
+        // Create link validation
+        if($request->method() == "POST")
         {
-            $link = $request->input('userLink');
-            linkModel::insert([
-                'added_by'=>$_COOKIE['login'],
-                'key' => self::regenLink(),
-                'link' => $link
-            ]);
-            return redirect('/links');
+            if(filter_var($request->input('userLink'), FILTER_VALIDATE_URL))
+            {   
+                $link = $request->input('userLink');
+                linkModel::insert([
+                    'added_by'=>$_COOKIE['login'],
+                    'key' => self::regenLink(),
+                    'link' => $link
+                ]);
+                return redirect('/links');
+            }
+            else
+                return back(); 
         }
         else
             return view('link_create');
@@ -53,25 +59,30 @@ class LinkController extends Controller
     {
         if($request->method() == "POST")
         {
-            $userLink = $request->input('userLink');
-            $newUserLink = $request->input('newUserLink');
-            if(!$newUserLink)
-                $newUserLink = $userLink;
-            $condtForChangeLink = $request->input('condtForChangeKey');
-            if($condtForChangeLink)
+            if(filter_var($request->input('newUserLink'), FILTER_VALIDATE_URL))
             {
-                linkModel::where('link', $userLink)->update([
-                    'link'=>$newUserLink,
-                    'key'=>self::regenLink()
-                ]);
+                $userLink = $request->input('userLink');
+                $newUserLink = $request->input('newUserLink');
+                if(!$newUserLink)
+                    $newUserLink = $userLink;
+                $condtForChangeLink = $request->input('condtForChangeKey');
+                if($condtForChangeLink)
+                {
+                    linkModel::where('link', $userLink)->update([
+                        'link'=>$newUserLink,
+                        'key'=>self::regenLink()
+                    ]);
+                }
+                else
+                {
+                    linkModel::where('link', $userLink)->update([
+                        'link'=>$newUserLink
+                    ]);
+                }
+                return redirect('/links');
             }
             else
-            {
-                linkModel::where('link', $userLink)->update([
-                    'link'=>$newUserLink
-                ]);
-            }
-            return redirect('/links');
+                return back(); 
         }
         else
         {
@@ -84,7 +95,6 @@ class LinkController extends Controller
     {
         if($request->method()=='POST')
         {
-            //"userLink":["https:\/\/github.com\/Sedonn\/linksliser","https:\/\/www.php.net\/"]}
             $userLinks = $request->input('userLink');
             foreach($userLinks as $userLink)
                 linkModel::where('link',$userLink)->delete();

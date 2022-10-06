@@ -9,7 +9,7 @@ class Link extends Model
     protected $table = "links";
 
     protected $fillable = [
-        'added_by',
+        'user_id',
         'key',
         'url'
     ];
@@ -17,4 +17,9 @@ class Link extends Model
     public $incrementing = false;
 
     public $timestamps = false;
+
+    public function getLinkByKey(string $key): object | null
+    {
+        return $this->query()->where('key', $key)->first();
+    }
 }

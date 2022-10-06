@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
 
 class UserController extends Controller
 {
+    protected User $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -18,7 +24,7 @@ class UserController extends Controller
         ]);
         $credentials = $request->only('login', 'password');
 
-        if (!$token = Auth::attempt($credentials)) {
+        if (!$token = \auth()->attempt($credentials)) {
             return \redirect()->route('login');
         }
 
@@ -35,18 +41,18 @@ class UserController extends Controller
             'password' => 'required|string'
         ]);
 
-        (new User([
+        $this->user->query()->create([
             'login' => $request->login,
             'email' => $request->email,
             'password' => Hash::make($request->password)
-        ]))->save();
+        ]);
 
         return \redirect()->route('login');
     }
 
     public function logout()
     {
-        Auth::logout();
+        \auth()->logout();
         return \redirect()->route('login');
     }
 

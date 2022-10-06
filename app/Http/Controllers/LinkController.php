@@ -3,39 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
-    private function getUrlHash(string $url)
+    protected Link $link;
+
+    public function __construct(Link $link)
+    {
+        $this->link = $link;
+    }
+
+    private function user(): User
+    {
+        return \auth()->user();
+    }
+
+    private function getUrlHash(string $url): string | false
     {
         return hash('md5', $url);
     }
 
-    private function getUserLinks()
-    {
-        return Link::query()->where('added_by', \auth()->user()->login)->get();
-    }
-
     public function redirectToUserLink($key)
     {
-        $link = Link::query()->where('key', $key)->first();
+        $link = $this->link->getLinkByKey($key);
         return ($link) ? \redirect($link->url) : \view('pages.404');
     }
 
     public function createUserLink(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'link' => 'required | url'
         ]);
 
-        $url = $validated['link'];
-
-        (new Link([
-            'added_by' => \auth()->user()->login,
-            'key' => $this->getUrlHash($url),
-            'url' => $url
-        ]))->save();
+        $this->user()->links()->create([
+            'key' => $this->getUrlHash($request->link),
+            'url' => $request->link
+        ]);
 
         return \redirect()->route('links');
     }
@@ -47,22 +52,23 @@ class LinkController extends Controller
             'newLink' => 'required | url'
         ]);
 
-        $link = Link::query()->where('url', $validated['oldLink'])->first();
-        $link->url = $validated['newLink'];
-        $link->key = $this->getUrlHash($validated['newLink']);
-
-        $link->save();
+        $this->link->query()
+            ->where('url', $validated['oldLink'])
+            ->update([
+                'key' => $this->getUrlHash($request->newLink),
+                'url' => $request->newLink
+            ]);
 
         return $this->showEditLinkPage();
     }
 
     public function deleteUserLink(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'links' => 'required | array'
         ]);
 
-        Link::query()->whereIn('url', $validated['links'])->delete();
+        $this->link->query()->whereIn('url', $request->links)->delete();
 
         return $this->showDeleteLinkPage();
     }
@@ -70,7 +76,7 @@ class LinkController extends Controller
     public function showLinksPage()
     {
         return view('pages.links', [
-            'links' => $this->getUserLinks()
+            'links' => $this->user()->links
         ]);
     }
 
@@ -82,14 +88,14 @@ class LinkController extends Controller
     public function showEditLinkPage()
     {
         return view('pages.link_edit', [
-            'links' => $this->getUserLinks()
+            'links' => $this->user()->links
         ]);
     }
 
     public function showDeleteLinkPage()
     {
         return view('pages.link_delete', [
-            'links' => $this->getUserLinks()
+            'links' => $this->user()->links
         ]);
     }
 }

@@ -27,7 +27,7 @@ Route::controller(UserController::class)->group(function () {
         Route::get('/register', 'showRegisterPage');
         Route::post('/register', 'register');
     });
-    Route::name('logout')->post('/logout', 'logout');
+    Route::name('logout')->match(['get', 'post'], '/logout', 'logout');
 });
 
 /**

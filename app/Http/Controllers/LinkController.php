@@ -2,118 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\linkModel as linkModel;
-use App\UserModel as userModel;
+use App\Models\Link;
 use Illuminate\Http\Request;
 
 class LinkController extends Controller
 {
-    public function regenLink()
+    private function getUrlHash(string $url)
     {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $link_key = '';
-        $condtForAddLink = FALSE;
-        while(!$condtForAddLink)
-        {
-            for($i = 0;$i < 15; $i++)
-            {
-                $random_char = $chars[mt_rand(0,strlen($chars)-1)];
-                $link_key .= $random_char;
-            }
-            $existLink = linkModel::where('key', $link_key)->first();
-            if($existLink) 
-                $link_key = '';
-            else
-                $condtForAddLink = TRUE;
-        }
-        return $link_key;
+        return hash('md5', $url);
     }
+
+    private function getUserLinks()
+    {
+        return Link::query()->where('added_by', \auth()->user()->login)->get();
+    }
+
     public function redirectToUserLink($key)
     {
-        $link = linkModel::where('key', $key)->first();
-        if ($link) return redirect($link->link);
-        else return view('404');
+        $link = Link::query()->where('key', $key)->first();
+        return ($link) ? \redirect($link->url) : \view('pages.404');
     }
+
     public function createUserLink(Request $request)
     {
-        // Create link validation
-        if($request->method() == "POST")
-        {
-            if(filter_var($request->input('userLink'), FILTER_VALIDATE_URL))
-            {   
-                $link = $request->input('userLink');
-                linkModel::insert([
-                    'added_by'=>$_COOKIE['login'],
-                    'key' => self::regenLink(),
-                    'link' => $link
-                ]);
-                return redirect('/links');
-            }
-            else
-                return back(); 
-        }
-        else
-            return view('link_create');
+        $validated = $request->validate([
+            'link' => 'required | url'
+        ]);
+
+        $url = $validated['link'];
+
+        (new Link([
+            'added_by' => \auth()->user()->login,
+            'key' => $this->getUrlHash($url),
+            'url' => $url
+        ]))->save();
+
+        return \redirect()->route('links');
     }
+
     public function editUserLink(Request $request)
     {
-        if($request->method() == "POST")
-        {
-            if(filter_var($request->input('newUserLink'), FILTER_VALIDATE_URL))
-            {
-                $userLink = $request->input('userLink');
-                $newUserLink = $request->input('newUserLink');
-                if(!$newUserLink)
-                    $newUserLink = $userLink;
-                $condtForChangeLink = $request->input('condtForChangeKey');
-                if($condtForChangeLink)
-                {
-                    linkModel::where('link', $userLink)->update([
-                        'link'=>$newUserLink,
-                        'key'=>self::regenLink()
-                    ]);
-                }
-                else
-                {
-                    linkModel::where('link', $userLink)->update([
-                        'link'=>$newUserLink
-                    ]);
-                }
-                return redirect('/links');
-            }
-            else
-                return back(); 
-        }
-        else
-        {
-            $links = linkModel::where('added_by',$_COOKIE['login'])->get();
-            return view('link_edit',['userLinks'=>$links]);
-        }
-            
+        $validated = $request->validate([
+            'oldLink' => 'required | url',
+            'newLink' => 'required | url'
+        ]);
+
+        $link = Link::query()->where('url', $validated['oldLink'])->first();
+        $link->url = $validated['newLink'];
+        $link->key = $this->getUrlHash($validated['newLink']);
+
+        $link->save();
+
+        return $this->showEditLinkPage();
     }
+
     public function deleteUserLink(Request $request)
     {
-        if($request->method()=='POST')
-        {
-            $userLinks = $request->input('userLink');
-            foreach($userLinks as $userLink)
-                linkModel::where('link',$userLink)->delete();
-            return redirect('/links');
-        }
-        else
-        {
-            $links = linkModel::where('added_by',$_COOKIE['login'])->get();
-            return view('link_delete',['userLinks'=>$links]);
-        }
-            
+        $validated = $request->validate([
+            'links' => 'required | array'
+        ]);
+
+        Link::query()->whereIn('url', $validated['links'])->delete();
+
+        return $this->showDeleteLinkPage();
     }
-    public function getAllUserLinks()
+
+    public function showLinksPage()
     {
-        $links = linkModel::where('added_by',$_COOKIE['login'])->get();
-        return view('links_list',['userLinks'=>$links]);
+        return view('pages.links', [
+            'links' => $this->getUserLinks()
+        ]);
     }
-    public function showErrorPage()
+
+    public function showCreateLinkPage()
     {
-        return view('404');
+        return view('pages.link_create');
+    }
+
+    public function showEditLinkPage()
+    {
+        return view('pages.link_edit', [
+            'links' => $this->getUserLinks()
+        ]);
+    }
+
+    public function showDeleteLinkPage()
+    {
+        return view('pages.link_delete', [
+            'links' => $this->getUserLinks()
+        ]);
     }
 }

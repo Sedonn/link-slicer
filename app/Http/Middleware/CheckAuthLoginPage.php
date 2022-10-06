@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\UserModel as userModel;
+use App\Models\UserModel as userModel;
 use Closure;
 
 class CheckAuthLoginPage

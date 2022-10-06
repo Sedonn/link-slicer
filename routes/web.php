@@ -1,4 +1,9 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LinkController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,33 +15,43 @@
 |
 */
 
-Route::match(['get', 'post'], '/', ['uses'=>'UserLoginController@login', 'as'=>'login'])->middleware('loginAuth');
-
-Route::match(['get', 'post'], '/register', ['uses'=>'UserRegisterContoller@register', 'as'=>'register']);
-
-Route::match(['get', 'post'], '/exit',['uses'=>'UserLoginController@logout', 'as'=>'logout']);
-
-Route::get('/links', 'LinkController@getAllUserLinks')->middleware('userAuthorize');
-
-Route::match(['get', 'post'], '/createlink', ['uses'=>'LinkController@createUserLink', 'as'=>'createLink'])->middleware('userAuthorize');
-
-Route::match(['get', 'post'], '/editlink', ['uses'=>'LinkController@editUserLink', 'as'=>'editLink'])->middleware('userAuthorize');
-
-Route::match(['get', 'post'], '/deletelink',['uses'=>'LinkController@deleteUserLink', 'as'=>'deleteLink'])->middleware('userAuthorize');
-
-Route::get('/{linkKey?}', 'LinkController@redirectToUserLink');
-
-/*  Autorize
-->middleware('userAuthorize')
-Route::group(['middleware'=>'userAuthorize'], function () {
-    Route::match(['get', 'post'], '/register', ['uses'=>'UserRegisterContoller@register', 'as'=>'register']);
-
-    Route::match(['get', 'post'], '/exit',['uses'=>'UserLoginController@logout', 'as'=>'logout']);
-
-    Route::get('/links', 'LinkController@getAllUserLinks');
-
-    Route::match(['get', 'post'], '/createlink', 'LinkController@createUserLink');
-
-    Route::match(['get', 'post'], '/editlink/{linkId?}', 'LinkController@editUserLink');
+/**
+ * User routes
+ */
+Route::controller(UserController::class)->group(function () {
+    Route::name('login')->group(function () {
+        Route::get('/', 'showLoginPage');
+        Route::post('/', 'login');
+    });
+    Route::name('register')->group(function () {
+        Route::get('/register', 'showRegisterPage');
+        Route::post('/register', 'register');
+    });
+    Route::name('logout')->post('/logout', 'logout');
 });
-*/
+
+/**
+ * Link routes
+ */
+Route::middleware('auth:web')->controller(LinkController::class)->group(function () {
+    Route::name('createLink')->group(function () {
+        Route::get('/createlink', 'showCreateLinkPage');
+        Route::post('/createlink', 'createUserLink');
+    });
+
+    Route::name('editLink')->group(function () {
+        Route::get('/editlink', 'showEditLinkPage');
+        Route::post('/editlink', 'editUserLink');
+    });
+
+    Route::name('deleteLink')->group(function () {
+        Route::get('/deletelink', 'showDeleteLinkPage');
+        Route::post('/deletelink', 'deleteUserLink');
+    });
+
+    Route::name('links')->group(function () {
+        Route::get('/links', 'showLinksPage');
+    });
+});
+
+Route::get('/{linkKey?}', [LinkController::class, 'redirectToUserLink']);

@@ -23,34 +23,36 @@ Route::controller(UserController::class)->group(function () {
         Route::get('/', 'showLoginPage');
         Route::post('/', 'login');
     });
+
     Route::name('register')->group(function () {
         Route::get('/register', 'showRegisterPage');
         Route::post('/register', 'register');
     });
+    
     Route::name('logout')->match(['get', 'post'], '/logout', 'logout');
 });
 
 /**
  * Link routes
  */
-Route::middleware('auth:web')->controller(LinkController::class)->group(function () {
-    Route::name('createLink')->group(function () {
-        Route::get('/createlink', 'showCreateLinkPage');
-        Route::post('/createlink', 'createUserLink');
-    });
+Route::middleware('auth:web')->group(function () {
+    Route::prefix('links')->controller(LinkController::class)->group(function () {
+        Route::name('links')->get('/', 'showLinksPage');
 
-    Route::name('editLink')->group(function () {
-        Route::get('/editlink', 'showEditLinkPage');
-        Route::post('/editlink', 'editUserLink');
-    });
+        Route::name('createLink')->group(function () {
+            Route::get('/create', 'showCreateLinkPage');
+            Route::post('/create', 'store');
+        });
 
-    Route::name('deleteLink')->group(function () {
-        Route::get('/deletelink', 'showDeleteLinkPage');
-        Route::post('/deletelink', 'deleteUserLink');
-    });
+        Route::name('editLink')->group(function () {
+            Route::get('/edit', 'showEditLinkPage');
+            Route::put('/edit', 'update');
+        });
 
-    Route::name('links')->group(function () {
-        Route::get('/links', 'showLinksPage');
+        Route::name('deleteLink')->group(function () {
+            Route::get('/delete', 'showDeleteLinkPage');
+            Route::delete('/delete', 'delete');
+        });
     });
 });
 

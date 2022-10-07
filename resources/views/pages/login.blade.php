@@ -13,12 +13,12 @@
                 <form class="user" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
-                        <input type="login" name="login" class="form-control form-control-user" id="exampleInputEmail"
+                        <input type="login" name="login" class="form-control form-control-user"
                             aria-describedby="loginHelp" placeholder="Enter Login...">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control form-control-user"
-                            id="exampleInputPassword" placeholder="Password">
+                        <input required type="password" name="password" class="form-control form-control-user"
+                            placeholder="Password">
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-checkbox small">

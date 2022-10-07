@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\User\LoginUserRequest;
+use App\Http\Requests\User\RegisterUserRequest;
 use App\Models\User;
 
 class UserController extends Controller
@@ -16,15 +17,9 @@ class UserController extends Controller
         $this->user = $user;
     }
 
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $request->validate([
-            'login' => 'required|string',
-            'password' => 'required|string'
-        ]);
-        $credentials = $request->only('login', 'password');
-
-        if (!$token = \auth()->attempt($credentials)) {
+        if (!$token = \auth()->attempt($request->validated())) {
             return \redirect()->route('login');
         }
 
@@ -33,14 +28,8 @@ class UserController extends Controller
         return \redirect()->route('links');
     }
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
-        $request->validate([
-            'login' => 'required|string',
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
-
         $this->user->query()->create([
             'login' => $request->login,
             'email' => $request->email,

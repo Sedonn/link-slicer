@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\Link\DeleteLinkRequest;
+use App\Http\Requests\Link\UpdateLinkRequest;
+use App\Http\Requests\Link\StoreLinkRequest;
 
 class LinkController extends Controller
 {
@@ -31,12 +33,8 @@ class LinkController extends Controller
         return ($link) ? \redirect($link->url) : \view('pages.404');
     }
 
-    public function createUserLink(Request $request)
+    public function store(StoreLinkRequest $request)
     {
-        $request->validate([
-            'link' => 'required | url'
-        ]);
-
         $this->user()->links()->create([
             'key' => $this->getUrlHash($request->link),
             'url' => $request->link
@@ -45,15 +43,10 @@ class LinkController extends Controller
         return \redirect()->route('links');
     }
 
-    public function editUserLink(Request $request)
+    public function update(UpdateLinkRequest $request)
     {
-        $validated = $request->validate([
-            'oldLink' => 'required | url',
-            'newLink' => 'required | url'
-        ]);
-
         $this->link->query()
-            ->where('url', $validated['oldLink'])
+            ->where('url', $request->oldLink)
             ->update([
                 'key' => $this->getUrlHash($request->newLink),
                 'url' => $request->newLink
@@ -62,12 +55,8 @@ class LinkController extends Controller
         return $this->showEditLinkPage();
     }
 
-    public function deleteUserLink(Request $request)
+    public function delete(DeleteLinkRequest $request)
     {
-        $request->validate([
-            'links' => 'required | array'
-        ]);
-
         $this->link->query()->whereIn('url', $request->links)->delete();
 
         return $this->showDeleteLinkPage();

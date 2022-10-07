@@ -6,6 +6,7 @@
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">Delete link</h1>
         <form action="{{ route('deleteLink') }}" method="POST">
+            @method('DELETE')
             @csrf
             <fieldset>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

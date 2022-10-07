@@ -6,6 +6,7 @@
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">Edit link</h1>
         <form action="{{ route('editLink') }}" method="POST">
+            @method('PUT')
             @csrf
             <fieldset>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -20,8 +21,8 @@
                         @if ($links->count() > 0)
                             @foreach ($links as $link)
                                 <tr>
-                                    <td width="10px"><input type="radio" name="oldLink" value="{{ $link->url }}">
-                                    </td>
+                                    <td width="5px"><input type="radio" required name="oldLink"
+                                            value="{{ $link->url }}"></td>
                                     <td><a href="{{ $link->url }}">{{ $link->url }}</a></td>
                                     <td><a href="http://linkslicer.home/{{ $link->key }}">{{ $link->key }}</a></td>
                                 </tr>
@@ -29,7 +30,8 @@
                         @endif
                     </tbody>
                 </table>
-                <input type="url" placeholder="Enter new link" name="newLink" class="form-control form-control-user"><br>
+                <input required type="url" placeholder="Enter new link" name="newLink"
+                    class="form-control form-control-user"><br>
                 <button class="btn btn-primary btn-user btn-block">Change link</button>
             </fieldset>
         </form>

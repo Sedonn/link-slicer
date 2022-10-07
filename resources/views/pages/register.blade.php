@@ -13,20 +13,20 @@
                 <form class="user" method="POST" action="{{ route('register') }}">
                     @csrf
                     <div class="form-group">
-                        <input type="login" name="login" class="form-control form-control-user" id="exampleInputEmail"
+                        <input required type="login" name="login" class="form-control form-control-user"
                             aria-describedby="loginHelp" placeholder="Enter Login">
                     </div>
                     <div class="form-group">
-                        <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail"
+                        <input required type="email" name="email" class="form-control form-control-user"
                             aria-describedby="EmailHelp" placeholder="Enter Email">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control form-control-user"
-                            id="exampleInputPassword" placeholder="Password">
+                        <input required type="password" name="password" class="form-control form-control-user"
+                            placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="cPassword" class="form-control form-control-user"
-                            id="exampleInputEmail" aria-describedby="loginHelp" placeholder="Confirm password">
+                        <input required type="password" name="password_confirmation" class="form-control form-control-user"
+                            aria-describedby="loginHelp" placeholder="Confirm password">
                     </div>
                     <button type="submit" class="btn btn-primary btn-user btn-block">Register</button>
                 </form>

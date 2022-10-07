@@ -20,7 +20,7 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" class="modal-open">
     <div id="wrapper">
         @include('layouts.service.sidebar')
 
@@ -28,19 +28,13 @@
             <div id="content">
                 @include('layouts.service.topbar')
                 @yield('content')
-            </div>
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Link-slicer</span>
-                    </div>
-                </div>
-            </footer>
+                @include('layouts.error_card')
         </div>
     </div>
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">

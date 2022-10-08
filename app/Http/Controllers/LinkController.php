@@ -19,38 +19,27 @@ class LinkController extends Controller
 
     private function user(): User
     {
-        return \auth()->user();
-    }
-
-    private function getUrlHash(string $url): string | false
-    {
-        return hash('md5', $url);
+        return auth()->user();
     }
 
     public function redirectToUserLink($key)
     {
         $link = $this->link->getLinkByKey($key);
-        return ($link) ? \redirect($link->url) : \view('pages.404');
+        return ($link) ? redirect($link->url) : view('pages.404');
     }
 
     public function store(StoreLinkRequest $request)
     {
-        $this->user()->links()->create([
-            'key' => $this->getUrlHash($request->link),
-            'url' => $request->link
-        ]);
+        $this->user()->links()->create($request->validated());
 
-        return \redirect()->route('links');
+        return redirect()->route('links');
     }
 
     public function update(UpdateLinkRequest $request)
     {
         $this->link->query()
-            ->where('url', $request->oldLink)
-            ->update([
-                'key' => $this->getUrlHash($request->newLink),
-                'url' => $request->newLink
-            ]);
+            ->where('url', $request->oldUrl)
+            ->update($request->only('url'));
 
         return $this->showEditLinkPage();
     }

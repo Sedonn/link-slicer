@@ -21,7 +21,7 @@
                         @if ($links->count() > 0)
                             @foreach ($links as $link)
                                 <tr>
-                                    <td width="5px"><input type="radio" required name="oldLink"
+                                    <td width="5px"><input type="radio" required name="oldUrl"
                                             value="{{ $link->url }}"></td>
                                     <td><a href="{{ $link->url }}">{{ $link->url }}</a></td>
                                     <td><a href="http://linkslicer.home/{{ $link->key }}">{{ $link->key }}</a></td>
@@ -30,7 +30,7 @@
                         @endif
                     </tbody>
                 </table>
-                <input required type="url" placeholder="Enter new link" name="newLink"
+                <input required type="url" placeholder="Enter new link" name="url"
                     class="form-control form-control-user"><br>
                 <button class="btn btn-primary btn-user btn-block">Change link</button>
             </fieldset>

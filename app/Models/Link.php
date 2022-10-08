@@ -10,13 +10,21 @@ class Link extends Model
 
     protected $fillable = [
         'user_id',
-        'key',
         'url'
     ];
 
     public $incrementing = false;
 
     public $timestamps = false;
+
+    public static function boot()
+    {
+        parent::boot();
+        
+        self::creating(function ($model) {
+            $model->key = \hash('md5', $model->url);
+        });
+    }
 
     public function getLinkByKey(string $key): object | null
     {

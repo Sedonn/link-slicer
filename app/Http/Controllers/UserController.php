@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Models\User;
@@ -19,39 +18,35 @@ class UserController extends Controller
 
     public function login(LoginUserRequest $request)
     {
-        if (!$token = \auth()->attempt($request->validated())) {
-            return \redirect()->route('login');
+        if (!$token = auth()->attempt($request->validated())) {
+            return redirect()->route('login');
         }
 
         Cookie::queue('token', $token, 60);
 
-        return \redirect()->route('links');
+        return redirect()->route('links');
     }
 
     public function register(RegisterUserRequest $request)
     {
-        $this->user->query()->create([
-            'login' => $request->login,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+        $this->user->query()->create($request->validated());
 
-        return \redirect()->route('login');
+        return redirect()->route('login');
     }
 
     public function logout()
     {
-        \auth()->logout();
-        return \redirect()->route('login');
+        auth()->logout();
+        return redirect()->route('login');
     }
 
     public function showLoginPage()
     {
-        return \view('pages.login');
+        return view('pages.login');
     }
 
     public function showRegisterPage()
     {
-        return \view('pages.register');
+        return view('pages.register');
     }
 }

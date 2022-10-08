@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -44,6 +46,13 @@ class User extends Authenticatable implements JWTSubject
     public function links()
     {
         return $this->hasMany(Link::class);
+    }
+
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($password) => Hash::make($password),
+        );
     }
 
     public function getJWTIdentifier()

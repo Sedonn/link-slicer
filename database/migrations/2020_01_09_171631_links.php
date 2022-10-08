@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)
                 ->constrained()
                 ->onDelete('cascade');
-            $table->string('key');
+            $table->string('key')->nullable();
             $table->string('url');
         });
     }

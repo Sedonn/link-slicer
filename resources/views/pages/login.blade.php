@@ -13,7 +13,7 @@
                 <form class="user" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
-                        <input type="login" name="login" class="form-control form-control-user"
+                        <input required type="login" name="login" class="form-control form-control-user"
                             aria-describedby="loginHelp" placeholder="Enter Login...">
                     </div>
                     <div class="form-group">
@@ -22,8 +22,8 @@
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-checkbox small">
-                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                            <label class="custom-control-label" for="customCheck">Remember Me</label>
+                            <input type="checkbox" id="remember" name="remember" class="custom-control-input">
+                            <label class="custom-control-label" for="remember">Remember Me</label>
                         </div>
                         <span class="register"><a href="http://linkslicer.home/register">Register</a></span>
                     </div>

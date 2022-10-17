@@ -8,6 +8,9 @@ use App\Http\Requests\Link\DeleteLinkRequest;
 use App\Http\Requests\Link\UpdateLinkRequest;
 use App\Http\Requests\Link\StoreLinkRequest;
 
+/**
+ * Contoller for operations with the Link model.
+ */
 class LinkController extends Controller
 {
     protected Link $link;
@@ -17,17 +20,34 @@ class LinkController extends Controller
         $this->link = $link;
     }
 
+    /**
+     * Get the current authenticated user.
+     *
+     * @return User
+     */
     private function user(): User
     {
         return auth()->user();
     }
 
-    public function redirectToUserLink($key)
+    /**
+     * Redirect to added by user url or get the 404 page.
+     *
+     * @param string $key
+     * @return void
+     */
+    public function redirectToUserLink(string $key)
     {
         $link = $this->link->getLinkByKey($key);
-        return ($link) ? redirect($link->url) : view('pages.404');
+        return ($link) ? redirect($link->url) : view('errors.404');
     }
 
+    /**
+     * Add a new link by current user.
+     *
+     * @param StoreLinkRequest $request
+     * @return void
+     */
     public function store(StoreLinkRequest $request)
     {
         $this->user()->links()->create($request->validated());
@@ -35,6 +55,12 @@ class LinkController extends Controller
         return redirect()->route('links');
     }
 
+    /**
+     * Update a one of existed user links.
+     *
+     * @param UpdateLinkRequest $request
+     * @return void
+     */
     public function update(UpdateLinkRequest $request)
     {
         $this->link->query()
@@ -44,6 +70,12 @@ class LinkController extends Controller
         return $this->showEditLinkPage();
     }
 
+    /**
+     * Delete a one or many of existed user links.
+     *
+     * @param DeleteLinkRequest $request
+     * @return void
+     */
     public function delete(DeleteLinkRequest $request)
     {
         $this->link->query()->whereIn('url', $request->links)->delete();
@@ -51,6 +83,11 @@ class LinkController extends Controller
         return $this->showDeleteLinkPage();
     }
 
+    /**
+     * Render the links page.
+     *
+     * @return void
+     */
     public function showLinksPage()
     {
         return view('pages.links', [
@@ -58,11 +95,21 @@ class LinkController extends Controller
         ]);
     }
 
+    /**
+     * Render the create link page.
+     *
+     * @return void
+     */
     public function showCreateLinkPage()
     {
         return view('pages.link_create');
     }
 
+    /**
+     * Render the update link page.
+     *
+     * @return void
+     */
     public function showEditLinkPage()
     {
         return view('pages.link_edit', [
@@ -70,6 +117,11 @@ class LinkController extends Controller
         ]);
     }
 
+    /**
+     * Render the detele link page.
+     *
+     * @return void
+     */
     public function showDeleteLinkPage()
     {
         return view('pages.link_delete', [

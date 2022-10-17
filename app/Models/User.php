@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class which describes user model. 
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
@@ -43,11 +46,21 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Set up a relationship with links to get all user links.
+     *
+     * @return void
+     */
     public function links()
     {
         return $this->hasMany(Link::class);
     }
 
+    /**
+     * Attribute which hashing a user password field.
+     *
+     * @return Attribute
+     */
     protected function password(): Attribute
     {
         return Attribute::make(

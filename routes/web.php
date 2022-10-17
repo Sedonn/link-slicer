@@ -56,4 +56,7 @@ Route::middleware('auth:web')->group(function () {
     });
 });
 
+/**
+ * Redirecting to user links.
+ */
 Route::get('/{linkKey?}', [LinkController::class, 'redirectToUserLink']);

@@ -14,6 +14,10 @@ This is a study project for learning the [Laravel framework](https://laravel.com
 
 ## Technologies
 
+### Frontend
+
+- [Start Bootstrap SB Admin 2](https://github.com/StartBootstrap/startbootstrap-sb-admin-2) version: 4.0.7
+
 ### Core
 
 -   PHP version: 8.0.2

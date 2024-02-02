@@ -1,0 +1,30 @@
+version: '3'
+
+name: link-slicer-development
+services:
+  link-slicer-db:
+    container_name: link-slicer-db-dev
+
+  link-slicer-server:
+    container_name: link-slicer-server-dev
+    image: link-slicer-server-dev
+    build:
+      dockerfile: dockerfile.development
+    ports:
+      - 8000:8000
+    environment:
+      - APP_DEBUG=true
+      - APP_ENV=development
+    volumes:
+      - ./:/app/
+      - vendor:/app/vendor
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
+
+volumes:
+  vendor:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vendor

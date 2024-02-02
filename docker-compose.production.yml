@@ -1,0 +1,15 @@
+version: '3'
+
+name: link-slicer-production
+services:
+  link-slicer-db:
+    container_name: link-slicer-db
+
+  link-slicer-server:
+    container_name: link-slicer-server
+    ports:
+      - 8000:80
+    build:
+      dockerfile: dockerfile.production
+    environment:
+      - APP_ENV=production

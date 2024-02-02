@@ -69,9 +69,9 @@ class UserController extends Controller
      */
     public function showLoginPage()
     {
-        if ($this->user) {
-            return redirect()->route('links');
-        }
+        // if ($this->user) {
+        //     return redirect()->route('links');
+        // }
         
         return view('pages.login');
     }

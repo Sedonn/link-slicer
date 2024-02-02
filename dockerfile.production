@@ -1,0 +1,33 @@
+FROM composer:2.6.6 AS build-stage
+
+# Building stage
+WORKDIR /app
+COPY . .
+RUN composer install --optimize-autoloader --no-dev
+
+FROM php:8.2.15-apache AS production-stage
+
+# Get the MySQL driver for enable artisan migrations
+RUN apt-get update && docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
+
+# Change the Apache document root
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public/
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Supress the Apache warning about missing hostname
+RUN echo "ServerName localhost" >>/etc/apache2/apache2.conf
+
+# Enable routing for the Laravel inside Apache
+RUN a2enmod rewrite headers
+
+# Set base php config
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Launching stage
+COPY --from=build-stage /app/ /var/www/html/
+
+WORKDIR /var/www/html/
+
+# Give permissions for the Laravel temp files
+RUN chmod -R 777 ./storage ./bootstrap/cache

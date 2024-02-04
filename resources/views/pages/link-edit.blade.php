@@ -1,4 +1,4 @@
-@extends('layouts.service.master')
+@extends('layouts.dashboard.master')
 
 @section('title', 'Edit link')
 

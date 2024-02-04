@@ -42,7 +42,7 @@ Route::middleware('auth:web')->group(function () {
         Route::name('view')->get('/', 'showLinksPage');
 
         Route::name('create.')->group(function () {
-            Route::view('/create', 'pages.link_create')->name('view');
+            Route::view('/create', 'pages.link-create')->name('view');
             Route::name('action')->post('/create', 'store');
         });
 

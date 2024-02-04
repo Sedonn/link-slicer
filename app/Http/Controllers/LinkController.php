@@ -112,7 +112,7 @@ class LinkController extends Controller
      */
     public function showEditLinkPage()
     {
-        return view('pages.link_edit', [
+        return view('pages.link-edit', [
             'links' => $this->user()->links
         ]);
     }
@@ -124,7 +124,7 @@ class LinkController extends Controller
      */
     public function showDeleteLinkPage()
     {
-        return view('pages.link_delete', [
+        return view('pages.link-delete', [
             'links' => $this->user()->links
         ]);
     }

@@ -1,11 +1,9 @@
-@extends('layouts.service.master')
+@extends('layouts.dashboard.master')
 
 @section('title', 'Create link')
 
 @section('content')
-    <!-- Begin Page Content -->
     <div class="container-fluid">
-        <!-- Page Heading -->
         <h1 class="h3 mb-4 text-gray-800">Create link</h1>
         <form action="{{ route('links.create.action') }}" method="POST">
             @csrf
@@ -16,6 +14,4 @@
             </fieldset>
         </form>
     </div>
-    <!-- /.container-fluid -->
-
 @endsection

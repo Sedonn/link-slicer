@@ -1,4 +1,4 @@
-@extends('layouts.site.master')
+@extends('layouts.base.master')
 
 @section('title', 'Regiter')
 

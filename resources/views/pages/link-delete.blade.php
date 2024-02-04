@@ -1,4 +1,4 @@
-@extends('layouts.service.master')
+@extends('layouts.dashboard.master')
 
 @section('title', 'Delete link')
 
@@ -36,5 +36,4 @@
             </fieldset>
         </form>
     </div>
-    <!-- End of Main Content -->
 @endsection

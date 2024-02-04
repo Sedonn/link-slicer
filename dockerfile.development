@@ -1,9 +1,8 @@
-FROM bitnami/laravel:9.5.2
+FROM bitnami/laravel:10.3.2
 
 # Launching stage
 WORKDIR /app
 COPY . .
 RUN composer install
-RUN composer update
 
 CMD ["/opt/bitnami/scripts/laravel/run.sh"]

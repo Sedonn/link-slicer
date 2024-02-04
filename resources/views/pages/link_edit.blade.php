@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">Edit link</h1>
-        <form action="{{ route('editLink') }}" method="POST">
+        <form action="{{ route('links.edit.action') }}" method="POST">
             @method('PUT')
             @csrf
             <fieldset>
@@ -24,7 +24,10 @@
                                     <td width="5px"><input type="radio" required name="oldUrl"
                                             value="{{ $link->url }}"></td>
                                     <td><a href="{{ $link->url }}">{{ $link->url }}</a></td>
-                                    <td><a href="http://linkslicer.home/{{ $link->key }}">{{ $link->key }}</a></td>
+                                    <td>
+                                        <a
+                                            href="{{ route('toSlicedLink', ['linkKey' => $link->key]) }}">{{ $link->key }}</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif

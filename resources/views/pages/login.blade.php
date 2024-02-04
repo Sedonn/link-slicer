@@ -10,7 +10,7 @@
                 <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                 </div>
-                <form class="user" method="POST" action="{{ route('login') }}">
+                <form class="user" method="POST" action="{{ route('user.login.action') }}">
                     @csrf
                     <div class="form-group">
                         <input required type="login" name="login" class="form-control form-control-user"
@@ -25,7 +25,7 @@
                             <input type="checkbox" id="remember" name="remember" class="custom-control-input">
                             <label class="custom-control-label" for="remember">Remember Me</label>
                         </div>
-                        <span class="register"><a href="http://linkslicer.home/register">Register</a></span>
+                        <span class="register"><a href="{{ route('user.register.view') }}">Register</a></span>
                     </div>
                     <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
                 </form>

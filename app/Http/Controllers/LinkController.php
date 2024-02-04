@@ -52,7 +52,7 @@ class LinkController extends Controller
     {
         $this->user()->links()->create($request->validated());
 
-        return redirect()->route('links');
+        return redirect()->route('links.view');
     }
 
     /**

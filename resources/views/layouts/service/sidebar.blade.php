@@ -20,10 +20,10 @@
         </a>
         <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('links') }}">My Links</a>
-                <a class="collapse-item" href="{{ route('createLink') }}">Create Link</a>
-                <a class="collapse-item" href="{{ route('editLink') }}">Edit Link</a>
-                <a class="collapse-item" href="{{ route('deleteLink') }}">Delete link</a>
+                <a class="collapse-item" href="{{ route('links.view') }}">My Links</a>
+                <a class="collapse-item" href="{{ route('links.create.view') }}">Create Link</a>
+                <a class="collapse-item" href="{{ route('links.edit.view') }}">Edit Link</a>
+                <a class="collapse-item" href="{{ route('links.delete.view') }}">Delete link</a>
             </div>
         </div>
     </li>

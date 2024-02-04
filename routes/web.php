@@ -18,45 +18,42 @@ use App\Http\Controllers\UserController;
 /**
  * User routes
  */
-Route::controller(UserController::class)->group(function () {
-    Route::name('login')->group(function () {
-        Route::get('/', 'showLoginPage');
-        Route::post('/', 'login');
+Route::name('user.')->controller(UserController::class)->group(function () {
+    Route::name('login.')->group(function () {
+        Route::view('/', 'pages.login')->name('view');
+        Route::name('action')->post('/', 'login');
     });
 
-    Route::name('register')->group(function () {
-        Route::get('/register', 'showRegisterPage');
-        Route::post('/register', 'register');
+    Route::name('register.')->group(function () {
+        Route::view('/register', 'pages.register')->name('view');
+        Route::name('action')->post('/register', 'register');
     });
-    
+
     Route::name('logout')->match(['get', 'post'], '/logout', 'logout');
 });
+
+Route::name('toSlicedLink')->get('/to/{linkKey?}', [LinkController::class, 'redirectToUserLink']);
 
 /**
  * Link routes
  */
 Route::middleware('auth:web')->group(function () {
-    Route::prefix('links')->controller(LinkController::class)->group(function () {
-        Route::name('links')->get('/', 'showLinksPage');
+    Route::name('links.')->prefix('links')->controller(LinkController::class)->group(function () {
+        Route::name('view')->get('/', 'showLinksPage');
 
-        Route::name('createLink')->group(function () {
-            Route::get('/create', 'showCreateLinkPage');
-            Route::post('/create', 'store');
+        Route::name('create.')->group(function () {
+            Route::view('/create', 'pages.link_create')->name('view');
+            Route::name('action')->post('/create', 'store');
         });
 
-        Route::name('editLink')->group(function () {
-            Route::get('/edit', 'showEditLinkPage');
-            Route::put('/edit', 'update');
+        Route::name('edit.')->group(function () {
+            Route::name('view')->get('/edit', 'showEditLinkPage');
+            Route::name('action')->put('/edit', 'update');
         });
 
-        Route::name('deleteLink')->group(function () {
-            Route::get('/delete', 'showDeleteLinkPage');
-            Route::delete('/delete', 'delete');
+        Route::name('delete.')->group(function () {
+            Route::name('view')->get('/delete', 'showDeleteLinkPage');
+            Route::name('action')->delete('/delete', 'delete');
         });
     });
 });
-
-/**
- * Redirecting to user links.
- */
-Route::get('/{linkKey?}', [LinkController::class, 'redirectToUserLink']);

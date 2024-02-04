@@ -18,7 +18,9 @@
                         @foreach ($links as $link)
                             <tr>
                                 <td><a href="{{ $link->url }}">{{ $link->url }}</a></td>
-                                <td><a href="http://linkslicer.home/{{ $link->key }}">{{ $link->key }}</a></td>
+                                <td>
+                                    <a href="{{ route('toSlicedLink', ['linkKey' => $link->key]) }}">{{ $link->key }}</a>
+                                </td>
                             </tr>
                         @endforeach
                     @endif

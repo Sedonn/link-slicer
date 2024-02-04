@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">Delete link</h1>
-        <form action="{{ route('deleteLink') }}" method="POST">
+        <form action="{{ route('links.delete.action') }}" method="POST">
             @method('DELETE')
             @csrf
             <fieldset>
@@ -24,7 +24,9 @@
                                     <td width="10px"><input type="checkbox" name="links[]" value="{{ $link->url }}">
                                     </td>
                                     <td><a href="{{ $link->url }}">{{ $link->url }}</a></td>
-                                    <td><a href="http://linkslicer.home/{{ $link->key }}">{{ $link->key }}</a></td>
+                                    <td><a
+                                            href="{{ route('toSlicedLink', ['linkKey' => $link->key]) }}">{{ $link->key }}</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif

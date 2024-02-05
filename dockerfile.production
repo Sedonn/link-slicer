@@ -31,3 +31,7 @@ WORKDIR /var/www/html/
 
 # Give permissions for the Laravel temp files
 RUN chmod -R 777 ./storage ./bootstrap/cache
+
+# Caching the laravel files
+RUN php artisan cache:clear
+RUN php artisan route:cache && php artisan view:cache
